@@ -124,8 +124,8 @@ function Cell() {
  * whose player's turn and check who won the game
  */
 function GameController(
-  playerOne = "Player One",
-  playerTwo = "Player Two"
+  playerOne = "Player 1",
+  playerTwo = "Player 2"
 ) {
   // Inheriting all the functions and properties from the Gameboard factory function
   const board = Gameboard();

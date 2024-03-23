@@ -3,3 +3,35 @@ body {
   margin: 0;
   height: 100%;
 }
+
+body {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  overflow: hidden;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+main .score-dashboard {
+  display: flex;
+  gap: inherit;
+}
+
+main .gameboard {
+  display: grid;
+  grid-template-columns: repeat(3, 125px);
+  grid-template-rows: repeat(3, 125px);
+  gap: 10px;
+}
+
+
+main .gameboard .column::before {
+  content: "X";
+}
