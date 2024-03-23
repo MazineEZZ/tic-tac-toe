@@ -71,6 +71,21 @@ function Gameboard() {
       if (rowValues === value.repeat(row)) return true;
       if (colValues === value.repeat(column)) return true;
     }
+
+    // Diagonal check left
+    let diagonalValues = "";
+    for (let i = 0; i < row; i++) {
+      diagonalValues += board[i][i].getValue();
+    }
+    if (diagonalValues === value.repeat(row)) return true;
+    
+    // Diagonal check right
+    diagonalValues = "";
+    for (let i = 0; i < row; i++) {
+      diagonalValues += board[i][row - i - 1].getValue();
+    }
+    if (diagonalValues === value.repeat(row)) return true;
+    
     return false
   }
 
@@ -155,13 +170,6 @@ function GameController(
       changeGameStatus();
     }
     
-    
-    if (board.isCellFull(...playerCoords)) {
-      if (board.isBoardFull()) {
-        changeGameStatus();
-      }
-    }
-
     if (!gameover) {
       printNewRound(...playerCoords);
     }
@@ -171,7 +179,15 @@ function GameController(
       printWinner();
       changeGameStatus();
     }
-    
+
+    // Check if the board is full
+    if (board.isCellFull(...playerCoords)) {
+      if (board.isBoardFull()) {
+        console.log("it's a tie");
+        changeGameStatus();
+      }
+    }
+
     getActivePlayer();
   }
 
