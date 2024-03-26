@@ -1,3 +1,5 @@
+let gameboardDiv = document.querySelector(".gameboard");
+
 /** 
  * Function that's responsible for all board properties
  * and functions
@@ -22,7 +24,7 @@ function Gameboard() {
     if (board[coords[0]][coords[1]].getValue() !== " ") return true;
 
     board[coords[0]][coords[1]].changeValue(player);
-    return false
+    return false;
   };
 
   const isCellFull = (...coords) => {
@@ -50,6 +52,25 @@ function Gameboard() {
     console.log(boardContent);
   }
 
+  // Fills the board with cells that have unique ids
+  const fillBoard = (func) => {
+    for (let i = 0; i < row; i++) {
+      for (let j = 0; j < column; j++) {
+        const cell = document.createElement("button");
+        cell.setAttribute("id", `${i}${j}`);
+
+        cell.addEventListener("click", () => {
+          let coords = cell.getAttribute("id").split("").map((str) => Number(str))
+          cell.textContent = func(coords);
+          cell.disabled = true;
+        });
+
+        gameboardDiv.appendChild(cell);
+      }
+    }
+  }
+
+  // Checks if the board is full
   const isBoardFull = () => {
     for (let i = 0; i < row; i++) {
       for (let j = 0; j < column; j++) {
@@ -59,6 +80,7 @@ function Gameboard() {
     return true;
   }
 
+  // Checks if the current player's value has won
   const isWinner = (value) => {
     // Horizontal & Vertical check
     for (let i = 0; i < row; i++) {
@@ -96,6 +118,7 @@ function Gameboard() {
     isBoardFull,
     isCellFull,
     isWinner,
+    fillBoard
   }
 }
 
@@ -124,13 +147,13 @@ function Cell() {
  * whose player's turn and check who won the game
  */
 function GameController(
-  playerOne = "Player 1",
-  playerTwo = "Player 2"
+  playerOne = "player1",
+  playerTwo = "player2"
 ) {
   // Inheriting all the functions and properties from the Gameboard factory function
   const board = Gameboard();
   let gameover = false;
-
+  
   const players = [{
     name: playerOne,
     value: "X"
@@ -139,57 +162,57 @@ function GameController(
     value: "O"
   }];
 
-  let activePlayer = players[0];
+  let activePlayer = players[1];
 
   const getActivePlayer = () => {
     activePlayer = (activePlayer === players[0]) ? players[1] : players[0];
   }
 
-  const printNewRound = (...coords) => {
-    board.printBoard();
-    console.log(`${activePlayer.name} has chose to put ${activePlayer.value} on row ${coords[0]} column ${coords[1]}`);
-  }
-
+  // Returns the game status
   const getGameStatus = () => gameover;
 
+  // Changes game status
   const changeGameStatus = () => {
     gameover = true;
   }
-
+  
+  // Prints winner and changes score
   const printWinner = () => {
-    console.log(`${activePlayer.name} has won the game!!`)
+    alert(`${activePlayer.name} has won the game!!`)
+    changeScore(activePlayer.name);
   }
 
-  const playRound = () => {
-    
-    const playerCoords = prompt("Where would you like to play? (row col)").split(" ").map(str => Number(str));
-    
-    // Fill cell and if already fill recall the func
-    if (board.fillCell(activePlayer.value, ...playerCoords)) {
-      console.log("Incorrect input")
-      changeGameStatus();
-    }
-    
-    if (!gameover) {
-      printNewRound(...playerCoords);
-    }
+  // Changes the score
+  changeScore = (name) => {
+    let scoreDiv = document.querySelector(`.${name}-score`);
+    const currScore = scoreDiv.children[1].textContent;
+    scoreDiv.children[1].textContent = +currScore + 1;
+  }
 
+  const playRound = (playerCoords) => {
+    getActivePlayer();
+    
+    board.fillCell(activePlayer.value, ...playerCoords);
+    
     // Check if there's a winner
     if (board.isWinner(activePlayer.value)) {
       printWinner();
       changeGameStatus();
     }
-
+    
     // Check if the board is full
     if (board.isCellFull(...playerCoords)) {
       if (board.isBoardFull()) {
-        console.log("it's a tie");
+        alert("it's a tie");
+        changeScore("draw");
         changeGameStatus();
       }
     }
 
-    getActivePlayer();
+    return activePlayer.value;
   }
+
+  board.fillBoard(playRound);
 
   return {
     playRound,
@@ -197,7 +220,4 @@ function GameController(
   }
 }
 
-const game = GameController();
-while(!game.getGameStatus()) {
-  game.playRound();
-}
+let game = GameController()
