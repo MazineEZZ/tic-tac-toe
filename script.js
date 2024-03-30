@@ -1,3 +1,6 @@
+// TODO: Reread the code and understand how each part of the code works
+// Get a book and start writing down each needed stepTRh
+
 let gameboardDiv = document.querySelector(".gameboard");
 
 /** 
@@ -60,7 +63,7 @@ function Gameboard() {
         cell.setAttribute("id", `${i}${j}`);
 
         cell.addEventListener("click", () => {
-          let coords = cell.getAttribute("id").split("").map((str) => Number(str))
+          let coords = cell.getAttribute("id").split("").map((str) => parseInt(str))
           cell.textContent = func(coords);
           cell.disabled = true;
         });
@@ -111,6 +114,12 @@ function Gameboard() {
     return false
   }
 
+  const disable = () => {
+    Array.from(gameboardDiv.children).forEach((child) => {
+      child.disabled = true;
+    })
+  };
+
   return {
     getBoard,
     fillCell,
@@ -118,7 +127,8 @@ function Gameboard() {
     isBoardFull,
     isCellFull,
     isWinner,
-    fillBoard
+    fillBoard,
+    disable
   }
 }
 
@@ -147,12 +157,11 @@ function Cell() {
  * whose player's turn and check who won the game
  */
 function GameController(
-  playerOne = "player1",
-  playerTwo = "player2"
+  playerOne = "Mazine",
+  playerTwo = "Alex"
 ) {
   // Inheriting all the functions and properties from the Gameboard factory function
   const board = Gameboard();
-  let gameover = false;
   
   const players = [{
     name: playerOne,
@@ -162,18 +171,24 @@ function GameController(
     value: "O"
   }];
 
+  const setScoreDiv = (number, name) => {
+    let scoreDiv = document.querySelector(`.player${number}-score`);
+    scoreDiv.setAttribute("id", `${name}Score`);
+    scoreDiv.children[0].textContent = name;
+  };
+
+  setScoreDiv(1, playerOne);
+  setScoreDiv(2, playerTwo);
+
   let activePlayer = players[1];
 
   const getActivePlayer = () => {
     activePlayer = (activePlayer === players[0]) ? players[1] : players[0];
   }
 
-  // Returns the game status
-  const getGameStatus = () => gameover;
-
   // Changes game status
-  const changeGameStatus = () => {
-    gameover = true;
+  const gameOver = () => {
+    board.disable()
   }
   
   // Prints winner and changes score
@@ -184,9 +199,9 @@ function GameController(
 
   // Changes the score
   changeScore = (name) => {
-    let scoreDiv = document.querySelector(`.${name}-score`);
+    let scoreDiv = document.querySelector(`#${name}Score`);
     const currScore = scoreDiv.children[1].textContent;
-    scoreDiv.children[1].textContent = +currScore + 1;
+    scoreDiv.children[1].textContent = parseInt(currScore) + 1;
   }
 
   const playRound = (playerCoords) => {
@@ -197,15 +212,14 @@ function GameController(
     // Check if there's a winner
     if (board.isWinner(activePlayer.value)) {
       printWinner();
-      changeGameStatus();
+      gameOver();
     }
     
     // Check if the board is full
     if (board.isCellFull(...playerCoords)) {
-      if (board.isBoardFull()) {
+      if (board.isBoardFull() && !board.isWinner(activePlayer.value)) {
         alert("it's a tie");
         changeScore("draw");
-        changeGameStatus();
       }
     }
 
