@@ -12,11 +12,24 @@
       <h1>Tic. tac. toe.</h1>
     </header>
     <main>
-      <dialog class="reset-modal">
+      <dialog class="player-names-forms">
+        <form>
+          <div class="player1">
+            <label for="player1Name">Name: </label>
+            <input required type="text" id="player1Name">
+          </div>
+          <div class="player2">
+            <label for="player2Name">Name: </label>
+            <input required type="text" id="player2Name">
+          </div>
+          <button id="submit">Submit</button>
+        </form>
+      </dialog>
+      <dialog class="replay-modal">
         <div class="message">
           Message
         </div>
-        <button class="reset"></button>
+        <button class="replay-btn" id="replayGameBtn">Replay?</button>
       </dialog>
       <div class="gameboard">
           <!-- Javascript injected code -->

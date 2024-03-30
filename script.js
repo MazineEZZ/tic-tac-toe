@@ -1,7 +1,15 @@
 // TODO: Reread the code and understand how each part of the code works
-// Get a book and start writing down each needed stepTRh
+// Get a notebook and start writing down each needed stepTRh
 
 let gameboardDiv = document.querySelector(".gameboard");
+let replayGameModal = document.querySelector(".replay-modal");
+let closeReplayModalBtn = document.querySelector("#replayGameBtn");
+let playerNamesFormsModal = document.querySelector(".player-names-forms");
+let submitForms = document.querySelector("#submit");
+
+submitForms.addEventListener("click", () => {
+  playerNamesFormsModal.close();
+})
 
 /** 
  * Function that's responsible for all board properties
@@ -117,8 +125,20 @@ function Gameboard() {
   const disable = () => {
     Array.from(gameboardDiv.children).forEach((child) => {
       child.disabled = true;
-    })
+    });
   };
+
+  // Reset the board by setting each cell to an empty string
+  // And enabling all cells so the game can be *replayed*
+  const deleteBoard = () => {
+    for (let i = 0; i < row; i++) {
+      for (let j = 0; j < column; j++) {
+        board[i][j].changeValue(" ");
+      }
+    }
+
+    gameboardDiv.textContent = ""
+  }
 
   return {
     getBoard,
@@ -128,7 +148,8 @@ function Gameboard() {
     isCellFull,
     isWinner,
     fillBoard,
-    disable
+    disable,
+    deleteBoard
   }
 }
 
@@ -188,13 +209,29 @@ function GameController(
 
   // Changes game status
   const gameOver = () => {
-    board.disable()
+    board.disable();
   }
   
   // Prints winner and changes score
   const printWinner = () => {
-    alert(`${activePlayer.name} has won the game!!`)
+    showReplayGameModal(`${activePlayer.name} has won the game!`);
     changeScore(activePlayer.name);
+  }
+
+  const showReplayGameModal = (message) => {
+    Array.from(replayGameModal.children).forEach((child) => {
+      if (Array.from(child.classList).includes("message")) {
+        child.textContent = message;
+      }
+    });
+
+    closeReplayModalBtn.addEventListener("click", () => {
+      board.deleteBoard();
+      board.fillBoard(playRound);
+      activePlayer = players[1];
+      replayGameModal.close();
+    });
+    replayGameModal.showModal();
   }
 
   // Changes the score
@@ -218,7 +255,7 @@ function GameController(
     // Check if the board is full
     if (board.isCellFull(...playerCoords)) {
       if (board.isBoardFull() && !board.isWinner(activePlayer.value)) {
-        alert("it's a tie");
+        showReplayGameModal("it's a tie!");
         changeScore("draw");
       }
     }
@@ -234,4 +271,5 @@ function GameController(
   }
 }
 
+playerNamesFormsModal.showModal()
 let game = GameController()

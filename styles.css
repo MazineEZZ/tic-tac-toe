@@ -14,7 +14,7 @@ html,
 body {
   margin: 0;
   height: 100%;
-  font-family: sans-serif;
+  font-family: 'Helvetica Neue', sans-serif;
   background-color: black;
   color: white;
 }
@@ -32,6 +32,37 @@ main {
   flex-direction: column;
   align-items: center;
   gap: 40px;
+}
+
+main .replay-modal::backdrop {
+  background-color: rgb(0, 0, 0, 0.5);
+}
+
+main .replay-modal {
+  background: black;
+  color: white;
+  padding: 100px 80px;
+  font-size: 2rem;
+  font-weight: bold;
+  outline: 6px solid white;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  gap: 20px;
+  transition: 0.3s;
+  z-index: -1;
+}
+
+main .replay-modal .replay-btn {
+  font-family: "Indie Flower";
+  background-color: transparent;
+  padding: 10px 30px;
+  font-size: 2rem;  
+  border: none;
+  font-weight: bold;
+  color: white;
 }
 
 main .score-dashboard {
