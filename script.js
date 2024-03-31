@@ -7,8 +7,16 @@ let closeReplayModalBtn = document.querySelector("#replayGameBtn");
 let playerNamesFormsModal = document.querySelector(".player-names-forms");
 let submitForms = document.querySelector("#submit");
 
+let player1Name = "Player 1";
+let player2Name = "Player 2";
+
 submitForms.addEventListener("click", () => {
   playerNamesFormsModal.close();
+  let player1NameInput = document.querySelector("#player1Name");
+  let player2NameInput = document.querySelector("#player2Name");
+  if (player1NameInput.value) {player1Name = player1NameInput.value};
+  if (player2NameInput.value) {player2Name = player2NameInput.value};
+  let game = GameController(player1Name, player2Name)
 })
 
 /** 
@@ -177,10 +185,7 @@ function Cell() {
  * Class to control the flow state of the game.
  * whose player's turn and check who won the game
  */
-function GameController(
-  playerOne = "Mazine",
-  playerTwo = "Alex"
-) {
+function GameController(playerOne, playerTwo) {
   // Inheriting all the functions and properties from the Gameboard factory function
   const board = Gameboard();
   
@@ -267,9 +272,7 @@ function GameController(
 
   return {
     playRound,
-    getGameStatus
   }
 }
 
 playerNamesFormsModal.showModal()
-let game = GameController()

@@ -34,14 +34,20 @@ main {
   gap: 40px;
 }
 
+main .player-names-forms::backdrop {
+  background-color: black;
+  height: 100%;
+}
+
 main .replay-modal::backdrop {
   background-color: rgb(0, 0, 0, 0.5);
 }
 
+main .player-names-forms,
 main .replay-modal {
   background: black;
   color: white;
-  padding: 100px 80px;
+  padding: 60px 40px;
   font-size: 2rem;
   font-weight: bold;
   outline: 6px solid white;
@@ -55,6 +61,25 @@ main .replay-modal {
   z-index: -1;
 }
 
+main .player-names-forms form {
+  display: flex;
+  flex-direction: column;
+}
+
+main .player-names-forms legend {
+  margin-bottom: 30px;
+}
+
+main .player-names-forms input {
+  font-size: 1.5rem;
+  padding: 5px;
+}
+
+main .player-names-forms button {
+  margin-top: 60px;
+}
+
+main .player-names-forms button,
 main .replay-modal .replay-btn {
   font-family: "Indie Flower";
   background-color: transparent;
@@ -72,7 +97,6 @@ main .score-dashboard {
 
 main .score-dashboard > * {
   font-family: "Montserrat";
-  width: 6rem;
   padding: 10px;
   display: flex;
   flex-direction: column;
